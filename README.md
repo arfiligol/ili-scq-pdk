@@ -177,7 +177,7 @@ private layout pack, add dependency groups and `uv` sources like:
 ecosystem = [
   "gsim",
   "gplugins",
-  "quantum-rf-pdk",
+  "qpdk",
 ]
 private-layout = [
   "i-li-chiu-scq-layouts-private",
@@ -186,9 +186,12 @@ private-layout = [
 [tool.uv.sources]
 gsim = { path = "../gsim", editable = true }
 gplugins = { path = "../gplugins", editable = true }
-quantum-rf-pdk = { path = "../quantum-rf-pdk", editable = true }
+qpdk = { path = "../quantum-rf-pdk", editable = true }
 i-li-chiu-scq-layouts-private = { path = "../../NCUAS_SC_Qubit_Design/i-li-chiu-scq-layouts-private", editable = true }
 ```
+
+The checkout folder is `quantum-rf-pdk`, but the Python distribution name is
+`qpdk`.
 
 Then sync the workspace environment from `ili-scq-pdk`:
 

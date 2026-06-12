@@ -65,7 +65,7 @@ local `pyproject.toml` edit instead of running ad hoc editable installs:
 ecosystem = [
   "gsim",
   "gplugins",
-  "quantum-rf-pdk",
+  "qpdk",
 ]
 private-layout = [
   "i-li-chiu-scq-layouts-private",
@@ -74,9 +74,12 @@ private-layout = [
 [tool.uv.sources]
 gsim = { path = "../gsim", editable = true }
 gplugins = { path = "../gplugins", editable = true }
-quantum-rf-pdk = { path = "../quantum-rf-pdk", editable = true }
+qpdk = { path = "../quantum-rf-pdk", editable = true }
 i-li-chiu-scq-layouts-private = { path = "../../NCUAS_SC_Qubit_Design/i-li-chiu-scq-layouts-private", editable = true }
 ```
+
+The checkout folder is `quantum-rf-pdk`, but the Python distribution name is
+`qpdk`; `uv` requires the dependency name to match the package metadata.
 
 Then sync one environment from `ili-scq-pdk`:
 
@@ -110,7 +113,8 @@ Ownership is split deliberately:
 
 Do not model the private provider as the owner of the process stack. The layer
 stack is part of the public process contract unless a future public PDK
-extension explicitly changes it.
+extension explicitly changes it. A private provider may pass through the public
+PDK `LAYER_STACK`; it should not define a separate private process stack.
 
 A private package registers itself through the existing entry point group:
 
