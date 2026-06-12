@@ -1,0 +1,83 @@
+[build-system]
+requires = ["uv_build>=0.10.8,<0.12.0"]
+build-backend = "uv_build"
+
+[project]
+name = "ili-scq-pdk"
+version = "0.1.0"
+description = "I-Li Chiu superconducting quantum/RF open PDK for GDSFactory"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+authors = [{ name = "I-Li Chiu" }]
+keywords = [
+  "gdsfactory",
+  "layout",
+  "pdk",
+  "quantum",
+  "rf",
+  "superconducting",
+]
+dependencies = [
+  "gdsfactory~=9.43.0",
+  "typing-extensions>=4.12.0",
+]
+
+[project.urls]
+documentation = "https://arfiligol.github.io/ili-scq-pdk/"
+repository = "https://github.com/arfiligol/ili-scq-pdk/"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=9.0.0",
+  "ruff>=0.15.11",
+]
+gdsfactoryplus = ["gdsfactoryplus", "httpx"]
+
+[dependency-groups]
+docs = [
+  "ipykernel",
+  "jupytext",
+  "linkify-it-py",
+  "matplotlib",
+  "myst-nb>=1.0",
+  "nbconvert",
+  "pydata-sphinx-theme",
+  "sphinx>=9.0",
+  "sphinx-copybutton",
+  "sphinx-design",
+  "sphinx-github-alerts",
+  "sphinxcontrib-bibtex",
+  "sphinxcontrib-bibtex-urn",
+  "sphinxcontrib-mermaid",
+  "sphinxcontrib-svgbob",
+]
+
+[project.entry-points."ili_scq_pdk.layout_providers"]
+"public.ili_cpw_demo" = "ili_scq_pdk.demo.provider:get_provider"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ili_scq_pdk"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.uv.build-backend]
+module-root = ""
+
+[tool.gdsfactoryplus]
+name = "ili_scq_pdk"
+
+[tool.gdsfactoryplus.pdk]
+name = "ili_scq_pdk"
+cells_no_model_expected = [
+  "cpw_straight",
+  "interdigital_capacitor",
+  "quarter_wave_resonator",
+]

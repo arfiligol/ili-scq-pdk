@@ -1,0 +1,128 @@
+name: Pages
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-html:
+    name: Build HTML docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install just
+        uses: extractions/setup-just@v3
+
+      - name: Sync docs environment
+        run: uv sync -p 3.12 --group docs --extra dev
+
+      - name: Build HTML docs
+        run: just docs
+
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-html
+          path: docs/_build/html
+          if-no-files-found: error
+
+  build-pdf:
+    name: Build PDF docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install just
+        uses: extractions/setup-just@v3
+
+      - name: Sync docs environment
+        run: uv sync -p 3.12 --group docs --extra dev
+
+      - name: Build LaTeX docs
+        run: just docs-latex
+
+      - name: Compile PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: docs/_build/latex
+          root_file: ili-scq-pdk.tex
+          latexmk_use_xelatex: true
+
+      - name: Collect PDF
+        run: |
+          mkdir -p docs/_build/pdf
+          cp docs/_build/latex/ili-scq-pdk.pdf docs/_build/pdf/ili-scq-pdk.pdf
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-pdf
+          path: docs/_build/pdf/ili-scq-pdk.pdf
+          if-no-files-found: error
+
+  deploy-pages:
+    name: Deploy GitHub Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: [build-html, build-pdf]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Download HTML artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-html
+          path: site
+
+      - name: Download PDF artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-pdf
+          path: site/_downloads
+
+      - name: Add PDF to site root
+        run: cp site/_downloads/ili-scq-pdk.pdf site/ili-scq-pdk.pdf
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

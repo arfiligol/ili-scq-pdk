@@ -1,0 +1,58 @@
+#########
+Notebooks
+#########
+
+.. meta::
+    :description: Public notebooks for the ili-scq-pdk open superconducting quantum/RF PDK.
+
+These notebooks are publication-safe examples built from the public PDK and
+public layout-provider API. They avoid private chip layouts, GDS inputs from
+private designs, run artifacts from private workflows, and lab-specific layout
+packages.
+
+Private resonator, AS reference qubit, and AS circular qubit V3 simulation
+notebooks belong in the private layout repository until their public workflow
+surface can be demonstrated without publishing layout/IP. This repository
+documents the public provider boundary and keeps notebook examples safe for
+GitHub Pages.
+
+**************
+Notebook Items
+**************
+
+.. grid:: 1 1 2 3
+    :gutter: 3
+
+    .. grid-item-card:: NB-001 Public PDK Quickstart
+
+        :doc:`notebooks/public_pdk_quickstart`
+
+        Activates the open PDK, builds public demo components, and inspects the
+        public layout-provider manifest.
+
+    .. grid-item-card:: NB-002 Resonator Workflow
+
+        Status: private source pending.
+
+        The public version should exercise provider-safe resonator simulation
+        without exposing private layout geometry.
+
+    .. grid-item-card:: NB-003 AS Reference Qubit Workflow
+
+        Status: private source pending.
+
+        The public version should document the workflow shape while keeping the
+        private qubit layout in the private layout repo.
+
+    .. grid-item-card:: NB-004 AS Circular Qubit V3 Workflow
+
+        Status: private source pending.
+
+        The public version should become available only after a provider-safe
+        public surface exists.
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    notebooks/public_pdk_quickstart

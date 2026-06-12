@@ -1,0 +1,11 @@
+.venv/
+.ruff_cache/
+.pytest_cache/
+__pycache__/
+*.egg-info/
+build/
+dist/
+docs/_build/
+docs/notebooks/
+docs/justfile_help.txt
+notebooks/*.ipynb
