@@ -139,7 +139,8 @@ not importable and the private layout remains unavailable.
 Use a long-lived personal branch as the prototype log:
 
 ```bash
-git switch -c i-li-chiu upstream/main
+git fetch origin
+git switch -c i-li-chiu origin/main
 ```
 
 Keep commits topical and cherry-pickable. A useful prototype commit should be
@@ -150,8 +151,14 @@ When a public slice is ready, create a clean PR branch from the target upstream
 base:
 
 ```bash
+# In ecosystem forks that track an upstream project:
 git fetch upstream
 git switch -c features/<topic> upstream/main
+
+# In self-owned repos without an upstream remote:
+git fetch origin
+git switch -c features/<topic> origin/main
+
 git cherry-pick -x <accepted-public-commit>
 ```
 
